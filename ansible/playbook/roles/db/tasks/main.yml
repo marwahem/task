@@ -1,0 +1,12 @@
+---
+# tasks file for db
+- name: Install MySQL
+  apt:
+    name: ['mysql-server','mysql-client','python-mysqldb']
+    update_cache: yes
+    state: present
+- name: Restart mysql
+  service:
+    name: mysql
+    state: restarted
+    enabled: yes

@@ -1,0 +1,68 @@
+---
+# tasks file for nginx
+- name: Install Nginx
+  apt:
+    name: nginx
+    update_cache: yes
+    state: present
+- name: Instal PHP-FPM
+  apt:
+    name: ['php','php-fpm','php-common','php-cli']
+    update_cache: yes
+    state: present
+
+- name: Check for /var/www/html Path
+  file:
+    path: /var/www/html
+    state: directory
+
+- name: Upload phpinfo.php file
+  copy:
+    src: phpinfo.php
+    dest: /var/www/html/phpinfo.php
+    owner: www-data
+    group: www-data
+- name: Create Nginx virtual host
+  copy:
+    src: ibtikar
+    dest: /etc/nginx/sites-available
+- name: create from file softlink
+  shell: ln -s /etc/nginx/sites-available/ibtikar /etc/nginx/sites-enabled
+- name: Restart Nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
+- name: Restart php-fpm
+  service:
+    name: php{{ php_version }}-fpm
+    state: restarted
+    enabled: yes
+
+#iptables
+- name: Configure Iptables For SSH
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 22
+    ctstate: NEW
+    syn: match
+    jump: ACCEPT
+
+- name: Configure Iptables For HTTP
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 80
+    ctstate: NEW
+    syn: match
+    jump: ACCEPT
+
+- name: Configure Iptables For HTTPS
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: 443
+    ctstate: NEW
+    syn: match
+    jump: ACCEPT

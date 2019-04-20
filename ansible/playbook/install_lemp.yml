@@ -1,0 +1,6 @@
+---
+- hosts: ibtkar-task
+  become: yes
+  roles:
+    - nginx
+    - db

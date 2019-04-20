@@ -1,0 +1,33 @@
+version: '2'
+
+services:
+  mariadb:
+    image: mariadb
+    container_name: ibtikar_mariadb
+    volumes:
+      - ./database:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+
+  nginx:
+    depends_on:
+      - mariadb
+    build: ./nginx
+    image: nginx
+    container_name: ibtikar-nginx
+    links:
+      - mariadb
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf:/etc/nginx/sites-enabled/
+      - /var/www/html:/var/www/html
+      - ../log/ibtikar-nginx:/var/log/nginx
+
+volumes:
+    db_data:

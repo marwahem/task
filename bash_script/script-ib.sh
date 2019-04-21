@@ -1,6 +1,5 @@
 #!/bin/bash
 # remove the file of result
-rm /tmp/file-result  #to not overlapping 
 echo "name" "time" > /tmp/file-result
 awk -F'|' '{print $3}' file-ib | uniq > file  #in this file i have names
 while IFS= read -r var		#looping for each name
@@ -21,7 +20,7 @@ grep $y /tmp/$var-file2 > /tmp/$var-file3
 diff -B <(sort file-t) <(sort /tmp/$var-file32) > /dev/null
 if [ $? -eq 0 ]
 then
-echo $var $y >> /tmp/file-result
+echo $var $y 
 fi
 done
 done < file

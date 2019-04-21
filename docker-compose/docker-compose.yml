@@ -1,33 +1,30 @@
-version: '2'
-
-services:
-  mariadb:
-    image: mariadb
-    container_name: ibtikar_mariadb
-    volumes:
-      - ./database:/var/lib/mysql
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password
+nginx:
+    image: tutum/nginx
+    container_name: nginx_ib
     ports:
-      - "3306:3306"
-
-  nginx:
-    depends_on:
-      - mariadb
-    build: ./nginx
-    image: nginx
-    container_name: ibtikar-nginx
+        - "80:80"
     links:
-      - mariadb
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
+        - phpfpm
     volumes:
-      - ./nginx/conf:/etc/nginx/sites-enabled/
-      - /var/www/html:/var/www/html
-      - ../log/ibtikar-nginx:/var/log/nginx
+        - ./nginx/default:/etc/nginx/sites-available/default
+        - ./nginx/default:/etc/nginx/sites-enabled/default
 
-volumes:
-    db_data:
+        - ./logs/nginx-error.log:/var/log/nginx/error.log
+        - ./logs/nginx-access.log:/var/log/nginx/access.log
+
+phpfpm:
+    image: php:fpm
+    container_name: phpfpm_ib
+    ports:
+        - "9000:9000"
+    volumes:
+        - ./public/phpinfo.php:/usr/share/nginx/html/phpinfo.php
+
+mariadb:
+  image: mariadb
+  container_name: mariadb_ib
+  environment:
+    MYSQL_ROOT_PASSWORD: admin
+    MYSQL_DATABASE: test
+    MYSQL_USER: test
+    MYSQL_PASSWORD: test

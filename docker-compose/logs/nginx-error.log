@@ -1,0 +1,2 @@
+2019/04/21 12:25:09 [error] 6#0: *5 FastCGI sent in stderr: "Primary script unknown" while reading response header from upstream, client: 197.51.154.209, server: 172.104.252.46, request: "GET /phpinfo.php HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "172.104.252.46"
+2019/04/21 12:46:39 [error] 6#0: *12 FastCGI sent in stderr: "Primary script unknown" while reading response header from upstream, client: 197.221.80.27, server: 172.104.252.46, request: "GET / HTTP/1.1", upstream: "fastcgi://172.17.0.3:9000", host: "172.104.252.46:80"
